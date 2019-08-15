@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<nav th:replace="fragments :: navigation"></nav>
+<h1 th:text="${title}">Healthcare Professionals</h1>
+
+<h2>Start you housing search here!</h2>
+
+<form method="post">
+    <label>Address 1</label>
+    <input name ="address1" type="text" /><br>
+    <label>Address 2</label>
+    <input name ="addresss" type="text" /><br>
+    <label>City</label>
+    <input name ="city" type="text" /><br>
+    <label>State</label>
+    <select name="state">
+        <option value="missouri">MO</option>
+        <option value="illinois">IL</option>
+        <option value="kansas">KS</option>
+        <option value="iowa">IA</option>
+    </select><br>
+</form>
+
+
+</body>
+</html>
