@@ -1,8 +1,11 @@
 package healthcare.housing.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import healthcare.housing.controllers.Security;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class User {
@@ -11,16 +14,25 @@ public class User {
     @GeneratedValue
     private int id;
 
+    @NotNull
+    @Size(min=2, max=25)
     private String firstName;
 
+    @NotNull
+    @Size(min=2, max=25)
     private String lastName;
 
+    @Email
     private String email;
 
+    @Size(min=6, max=20)
+    @NotNull
     private String username;
 
+    @Size(max=256)
     private String passHash;
 
+    @Size(max = 5)
     private String passSalt;
 
     public int getId() {
@@ -63,15 +75,15 @@ public class User {
         return passHash;
     }
 
-    public void setPassHash(String passHash) {
-        this.passHash = passHash;
+    public void setPassHash(String password) {
+        this.passHash = Security.hashPass(password);
     }
 
     public String getPassSalt() {
         return passSalt;
     }
 
-    public void setPassSalt(String passSalt) {
-        this.passSalt = passSalt;
+    public void setPassSalt() {
+        this.passSalt = Security.saltPass();
     }
 }

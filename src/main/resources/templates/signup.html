@@ -3,19 +3,35 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<form method="post">
-    <label for="firstName">First Name:</label>
-    <input field="firstName" name="firstName"/></br>
-    <label for="lastName">Last Name:</label>
-    <input field="lastName" name="lastName"/></br>
-    <label for="email">Email Address:</label>
-    <input type="email" field="email" name="email"/></br>
-    <label for="username">Username:</label>
-    <input field="username" /></br>
-    <label for="password">Password:</label>
-    <input field="password" name="password"/></br>
-    <label for="password2">Re-Enter Password:</label>
-    <input field="password" name="password2"/></br>
+<form method="post" th:object="${user}">
+    <div class="form-group">
+        <label th:for="firstName">First Name:</label>
+        <input th:field="*{firstName}" name="firstName"/>
+        <span th:errors="*{firstName}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="lastName">Last Name:</label>
+        <input th:field="*{lastName}" name="lastName"/>
+        <span th:errors="*{lastName}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="email">Email Address:</label>
+        <input type="email" th:field="*{email}" name="email"/>
+        <span th:errors="*{email}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="username">Username:</label>
+        <input th:field="*{username}" name="username">
+        <span th:errors="*{username}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="password">Password:</label>
+        <input field="password" name="password" type="password"/></br>
+    </div>
+    <div class="form-group">
+        <label th:for="password2">Re-Enter Password:</label>
+        <input field="password2" name="password2" type="password"/></br>
+    </div>
     <input type="submit" value="Signup" />
 </form>
 </body>
