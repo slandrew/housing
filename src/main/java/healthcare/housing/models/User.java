@@ -35,6 +35,16 @@ public class User {
     @Size(max = 5)
     private String passSalt;
 
+    private int emailVerified;
+
+    public int getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(int emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
     public int getId() {
         return id;
     }
@@ -83,7 +93,7 @@ public class User {
         return passSalt;
     }
 
-    public void setPassSalt() {
-        this.passSalt = Security.saltPass();
+    public void setPassSalt(String passSalt) {
+        this.passSalt = passSalt;
     }
 }

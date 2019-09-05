@@ -18,19 +18,22 @@
         <label th:for="email">Email Address:</label>
         <input type="email" th:field="*{email}" name="email"/>
         <span th:errors="*{email}" class="error"></span>
+        <span th:text="${emailError}" class="error"></span>
     </div>
     <div class="form-group">
         <label th:for="username">Username:</label>
         <input th:field="*{username}" name="username">
         <span th:errors="*{username}" class="error"></span>
+        <span th:text="${usernameError}" class="error"></span>
     </div>
     <div class="form-group">
         <label th:for="password">Password:</label>
-        <input field="password" name="password" type="password"/></br>
+        <input field="password" name="password" type="password"/>
     </div>
     <div class="form-group">
         <label th:for="password2">Re-Enter Password:</label>
-        <input field="password2" name="password2" type="password"/></br>
+        <input field="password2" name="password2" type="password"/>
+        <span th:text="${passError}" class="error"></span>
     </div>
     <input type="submit" value="Signup" />
 </form>
