@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.management.Query;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("signup")
@@ -39,11 +35,6 @@ public class SignupController {
             return "/signup";
         }
         for (User user : userDao.findAll()){
-            //username taken
-            if (user.getUsername().equals(newUser.getUsername())){
-                model.addAttribute("usernameError", "Username already taken.");
-                return "/signup";
-            }
             //email taken
             if (user.getEmail().equals(newUser.getEmail())){
                 if (user.getEmailVerified() == 1){

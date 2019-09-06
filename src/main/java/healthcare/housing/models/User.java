@@ -25,10 +25,6 @@ public class User {
     @Email
     private String email;
 
-    @Size(min=6, max=20)
-    @NotNull
-    private String username;
-
     @Size(max=256)
     private String passHash;
 
@@ -71,14 +67,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassHash() {

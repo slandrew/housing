@@ -4,11 +4,12 @@
 <body>
 <nav th:replace="fragments :: navigation"></nav>
     <form method="post">
-        <label for="username">Username:</label>
-        <input field="username" />
-        <label for="password">Password:</label>
-        <input field="password" name="password"/>
+        <label th:for="email">Email:</label>
+        <input field="email" name="email" type="email"/>
+        <label th:for="password">Password:</label>
+        <input field="password" name="password" type="password"/>
         <input type="submit" value="Login" />
     </form>
+<span th:text="${loginMessage}" class="message"></span>
 </body>
 </html>
