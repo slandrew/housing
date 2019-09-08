@@ -3,6 +3,8 @@ package healthcare.housing.controllers;
 import java.util.Random;
 
 public class Security {
+
+
     private static String hasher(String f){
         String a = "kKm8MV6v1jJZzIiNnY4yTt0GgLlDdBbsSHh7cCXxf3FEeUu9Oo5WwaArRQ2qpP";
         String b = "";
@@ -29,6 +31,16 @@ public class Security {
         String b = "";
         Random rand = new Random();
         for (int i = 0; i < 5; i++){
+            b = b + a.charAt(rand.nextInt(a.length()));
+        }
+        return b;
+    }
+
+    public static String generateSessionId() {
+        String a = "kKm8MV6v1jJZzIiNnY4yTt0GgLlDdBbsSHh7cCXxf3FEeUu9Oo5WwaArRQ2qpP";
+        String b ="";
+        Random rand = new Random();
+        while (b.length() < 256) {
             b = b + a.charAt(rand.nextInt(a.length()));
         }
         return b;

@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -31,6 +33,10 @@ public class User {
     @Size(max = 5)
     private String passSalt;
 
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Session> sessionList = new ArrayList<>();
+
     private int emailVerified;
 
     public int getEmailVerified() {
@@ -40,6 +46,11 @@ public class User {
     public void setEmailVerified(int emailVerified) {
         this.emailVerified = emailVerified;
     }
+
+    public void addSession (Session session) {
+        this.sessionList.add(session);
+    }
+
 
     public int getId() {
         return id;
@@ -83,5 +94,13 @@ public class User {
 
     public void setPassSalt(String passSalt) {
         this.passSalt = passSalt;
+    }
+
+    public List<Session> getSessionList() {
+        return sessionList;
+    }
+
+    public void setSessionList(List<Session> sessionList) {
+        this.sessionList = sessionList;
     }
 }
