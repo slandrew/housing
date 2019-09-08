@@ -1,15 +1,15 @@
 package healthcare.housing.controllers;
 
+import healthcare.housing.models.Session;
 import healthcare.housing.models.User;
+import healthcare.housing.models.data.SessionDao;
 import healthcare.housing.models.data.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 
 @Controller
@@ -19,8 +19,20 @@ public class SignupController {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private SessionDao sessionDao;
+
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String signup (Model model) {
+    public String signup (Model model, @CookieValue(name="activeSession", required=false) String activeSessionId) {
+        if (activeSessionId.length() == 256){
+            Session activeSession = new Session();
+            for (Session session : sessionDao.findAll()){
+                if (session.getSessionId().equals(activeSessionId)){
+                    activeSession = session;
+                }
+            }
+            model.addAttribute("activeSession", activeSession);
+        }
         model.addAttribute("title", "Signup");
         model.addAttribute(new User());
         return "signup";

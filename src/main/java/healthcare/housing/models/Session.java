@@ -33,6 +33,11 @@ public class Session {
         this.setSessionId();
     }
 
+    public int getId() {
+        return id;
+    }
+
+
     public void setSessionStart() {
         long currentTime = System.currentTimeMillis();
         this.sessionStart = currentTime;

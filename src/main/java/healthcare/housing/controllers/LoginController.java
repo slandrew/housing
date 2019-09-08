@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 
 @Controller
 @RequestMapping("login")
@@ -29,7 +32,8 @@ public class LoginController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String processLogin (Model model, @RequestParam("email") String email, @RequestParam("password") String password){
+    public String processLogin (Model model, @RequestParam("email") String email, @RequestParam("password") String password,
+                                HttpServletResponse response){
         for (User user : userDao.findAll()){
             if (user.getEmail().equals(email)){
                 User loggingUser = user;
@@ -39,6 +43,7 @@ public class LoginController {
                     activeSession.setUser(user);
                     //todocheck for duplicate session Ids
                     sessionDao.save(activeSession);
+                    response.addCookie(new Cookie("activeSession", activeSession.getSessionId()));
                     model.addAttribute("activeSession", activeSession);
                     model.addAttribute("loginMessage", "Login successful!");
                     return "login";
