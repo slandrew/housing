@@ -43,7 +43,7 @@ public class LoginController {
                     activeSession.setUser(user);
                     //todocheck for duplicate session Ids
                     sessionDao.save(activeSession);
-                    response.addCookie(new Cookie("activeSession", activeSession.getSessionId()));
+                    response.addCookie(new Cookie("ASID", activeSession.getSessionId()));
                     model.addAttribute("activeSession", activeSession);
                     model.addAttribute("loginMessage", "Login successful!");
                     return "login";

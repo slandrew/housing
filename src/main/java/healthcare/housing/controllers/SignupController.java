@@ -23,15 +23,36 @@ public class SignupController {
     private SessionDao sessionDao;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String signup (Model model, @CookieValue(name="activeSession", required=false) String activeSessionId) {
+    public String signup (Model model, @CookieValue(name="ASID", required=false) String activeSessionId) {
+        //check to see if session cookie exists at appropriate length
         if (activeSessionId.length() == 256){
-            Session activeSession = new Session();
+            //find session in list of sessions
             for (Session session : sessionDao.findAll()){
+                //if found
                 if (session.getSessionId().equals(activeSessionId)){
-                    activeSession = session;
+                    //assign to variable
+                    Session activeSession = session;
+                    //if session has expired
+                    if (activeSession.getSessionEnd() < System.currentTimeMillis()){
+                        //delete session and direct to login
+                        sessionDao.delete(activeSession);
+                        return "redirect:/login";
+                    }
+                    //reset expiration
+                    activeSession.setSessionEnd();
+                    //save to DB
+                    sessionDao.save(activeSession);
+                    //pass to view
+                    model.addAttribute("activeSession", activeSession);
+                }
+                //cleanup (might be a bad place)
+                if (session.getSessionEnd() < System.currentTimeMillis()){
+                    if (session.getSessionEnd() < System.currentTimeMillis()) {
+                        //delete session and direct to login
+                        sessionDao.delete(session);
+                    }
                 }
             }
-            model.addAttribute("activeSession", activeSession);
         }
         model.addAttribute("title", "Signup");
         model.addAttribute(new User());
