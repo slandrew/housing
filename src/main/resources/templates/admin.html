@@ -3,6 +3,6 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<h1 th:text="${'Welcome to ' + user.get().getFirstName() + ' ' + user.get().getLastName() + '''s Profile!'}"></h1>
+<a href="/admin/user-maintenance">User Maintenance</a>
 </body>
 </html>

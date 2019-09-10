@@ -1,5 +1,8 @@
 package healthcare.housing.controllers;
 
+import healthcare.housing.models.Session;
+
+import java.util.List;
 import java.util.Random;
 
 public class Security {
@@ -46,4 +49,26 @@ public class Security {
         return b;
     }
 
+    public static boolean isValidSessionId (String sessionId, Iterable<Session> sessions){
+        boolean result = false;
+        if (sessionId.length() == 256){
+            for (Session session : sessions){
+                if (session.getSessionId().equals(sessionId)){
+                    if (session.getSessionEnd() > System.currentTimeMillis()){
+                        result = true;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public static Session getActiveSession (String sessionId, Iterable<Session> sessions){
+        Session result = new Session();
+        for (Session session : sessions){
+            if (session.getSessionId().equals(sessionId)){
+                result = session;
+            }
+        }
+        return result;
+    }
 }

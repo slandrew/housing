@@ -3,9 +3,7 @@ package healthcare.housing.models;
 import healthcare.housing.controllers.Security;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +36,22 @@ public class User {
     private List<Session> sessionList = new ArrayList<>();
 
     private int emailVerified;
+
+    @Min(0)
+    @Max(2)
+    private int role;
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public User() {
+        this.role = 2;
+    }
 
     public int getEmailVerified() {
         return emailVerified;
