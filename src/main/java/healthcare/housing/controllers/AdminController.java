@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class AdminController {
     }
     @RequestMapping(value = "user-maintenance", method = RequestMethod.GET)
     public String userMaintenance (Model model, @CookieValue(name="ASID", required=false) String activeSessionId) {
-        List viewableUsers = new ArrayList();
+        List<User> viewableUsers = new ArrayList<>();
         if (activeSessionId.length() == 256){
             for (Session session : sessionDao.findAll()){
                 if (session.getSessionId().equals(activeSessionId)){
@@ -109,16 +110,30 @@ public class AdminController {
         return "/admin/user-maintenance";
     }
     @RequestMapping(value = "modify-user/{userId}", method = RequestMethod.GET)
-    public String signup (@PathVariable int userId, Model model, @CookieValue(name="ASID", required=false) String activeSessionId) {
-        if (Security.isValidSessionId(activeSessionId, sessionDao.findAll())){
-            Session activeSession = Security.getActiveSession(activeSessionId, sessionDao.findAll());
+    public String modifyUserById (@PathVariable int userId, Model model, RedirectAttributes attributes,
+                                  @CookieValue(name="ASID", required=false) String activeSessionId) {
+        Iterable<Session> currentSessionList = sessionDao.findAll();
+        String requestedUrl = "/admin/modify-user/" + userId;
+        attributes.addFlashAttribute("requestedUrl", requestedUrl);
+        if (Security.isValidSessionId(activeSessionId, currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            activeSession.refreshSession();
+            sessionDao.save(activeSession);
             User modifiedUser = userDao.findById(userId).get();
             model.addAttribute("activeSession", activeSession);
             model.addAttribute(modifiedUser);
             return "admin/modify-user";
         }
-        //if no session
+        //if session expires
+        else if(Security.isSessionExpired(activeSessionId,currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            sessionDao.delete(activeSession);
+            attributes.addFlashAttribute("loginMessage", "Session timed out. Please log in again.");
+            return "redirect:/login";
+        }
+        //if no active session
         else {
+            attributes.addFlashAttribute("loginMessage", "You are not logged in. Please log in to continue.");
             return "redirect:/login";
         }
     }

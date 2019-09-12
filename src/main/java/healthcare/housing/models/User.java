@@ -37,8 +37,6 @@ public class User {
 
     private int emailVerified;
 
-    @Min(0)
-    @Max(2)
     private int role;
 
     public int getRole() {

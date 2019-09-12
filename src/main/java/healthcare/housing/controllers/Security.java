@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class Security {
 
-
     private static String hasher(String f){
         String a = "kKm8MV6v1jJZzIiNnY4yTt0GgLlDdBbsSHh7cCXxf3FEeUu9Oo5WwaArRQ2qpP";
         String b = "";
@@ -67,6 +66,19 @@ public class Security {
         for (Session session : sessions){
             if (session.getSessionId().equals(sessionId)){
                 result = session;
+            }
+        }
+        return result;
+    }
+    public static boolean isSessionExpired (String sessionId, Iterable<Session> sessions) {
+        boolean result = false;
+        if (sessionId.length() == 256) {
+            for (Session session : sessions) {
+                if (session.getSessionId().equals(sessionId)) {
+                    if (session.getSessionEnd() < System.currentTimeMillis()) {
+                        result = true;
+                    }
+                }
             }
         }
         return result;
