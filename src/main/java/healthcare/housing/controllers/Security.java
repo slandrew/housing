@@ -83,4 +83,16 @@ public class Security {
         }
         return result;
     }
+
+    public static String sessionTimeoutMessage (){
+        return "Session timed out. Please log in again.";
+    }
+
+    public static String sessionNoSessionMessage() {
+        return "You are not logged in. Please log in to continue.";
+    }
+
+    public static String sessionNoPrivilege () {
+        return "Not sufficient privileges.";
+    }
 }

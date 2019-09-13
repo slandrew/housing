@@ -112,13 +112,19 @@ public class AdminController {
     @RequestMapping(value = "modify-user/{userId}", method = RequestMethod.GET)
     public String modifyUserById (@PathVariable int userId, Model model, RedirectAttributes attributes,
                                   @CookieValue(name="ASID", required=false) String activeSessionId) {
+        //set variables needed for security
         Iterable<Session> currentSessionList = sessionDao.findAll();
         String requestedUrl = "/admin/modify-user/" + userId;
         attributes.addFlashAttribute("requestedUrl", requestedUrl);
+        //check if valid session
         if (Security.isValidSessionId(activeSessionId, currentSessionList)){
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
+            if (activeSession.getUser().getRole() > 1){
+                attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
+                return "redirect:/";
+            }
             User modifiedUser = userDao.findById(userId).get();
             model.addAttribute("activeSession", activeSession);
             model.addAttribute(modifiedUser);
@@ -128,12 +134,12 @@ public class AdminController {
         else if(Security.isSessionExpired(activeSessionId,currentSessionList)){
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             sessionDao.delete(activeSession);
-            attributes.addFlashAttribute("loginMessage", "Session timed out. Please log in again.");
+            attributes.addFlashAttribute("loginMessage", Security.sessionTimeoutMessage());
             return "redirect:/login";
         }
         //if no active session
         else {
-            attributes.addFlashAttribute("loginMessage", "You are not logged in. Please log in to continue.");
+            attributes.addFlashAttribute("loginMessage", Security.sessionNoSessionMessage());
             return "redirect:/login";
         }
     }
