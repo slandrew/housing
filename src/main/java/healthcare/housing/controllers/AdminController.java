@@ -27,87 +27,75 @@ public class AdminController {
     private UserDao userDao;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String admin (Model model, @CookieValue(name="ASID", required=false) String activeSessionId) {
-        if (activeSessionId.length() == 256){
-            for (Session session : sessionDao.findAll()){
-                if (session.getSessionId().equals(activeSessionId)){
-                    Session activeSession = session;
-                    if (activeSession.getSessionEnd() < System.currentTimeMillis()){
-                        //delete session and direct to login
-                        sessionDao.delete(activeSession);
-                        return "redirect:/login";
-                    }
-                    //reset expiration
-                    activeSession.setSessionEnd();
-                    //save to DB
-                    sessionDao.save(activeSession);
-                    //pass to view
-                    model.addAttribute("activeSession", activeSession);
-                    //redirect if not enough privileges
-                    if (activeSession.getUser().getRole() > 1){
-                        return "redirect:";
-                    }
-                }
-                //cleanup (might be a bad place)
-                if (session.getSessionEnd() < System.currentTimeMillis()){
-                    if (session.getSessionEnd() < System.currentTimeMillis()) {
-                        //delete session and direct to login
-                        sessionDao.delete(session);
-                    }
-                }
+    public String admin (Model model, RedirectAttributes attributes,
+                         @CookieValue(name="ASID", required=false) String activeSessionId) {
+        Iterable<Session> currentSessionList = sessionDao.findAll();
+        String requestedUrl = "/admin";
+        attributes.addFlashAttribute("requestedUrl", requestedUrl);
+        //check if valid session
+        if (Security.isValidSessionId(activeSessionId, currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            activeSession.refreshSession();
+            sessionDao.save(activeSession);
+            if (activeSession.getUser().getRole() > 1){
+                attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
+                return "redirect:/";
             }
+            model.addAttribute("title", "Administration");
+            model.addAttribute("activeSession", activeSession);
+            return "admin";
         }
-        //if no session
-        else {
+        //if session expires
+        else if(Security.isSessionExpired(activeSessionId,currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            sessionDao.delete(activeSession);
+            attributes.addFlashAttribute("loginMessage", Security.sessionTimeoutMessage());
             return "redirect:/login";
         }
-        model.addAttribute("title", "Administration");
-        return "/admin";
+        //if no active session
+        else {
+            attributes.addFlashAttribute("loginMessage", Security.sessionNoSessionMessage());
+            return "redirect:/login";
+        }
     }
     @RequestMapping(value = "user-maintenance", method = RequestMethod.GET)
-    public String userMaintenance (Model model, @CookieValue(name="ASID", required=false) String activeSessionId) {
+    public String userMaintenance (Model model, RedirectAttributes attributes,
+                                   @CookieValue(name="ASID", required=false) String activeSessionId) {
         List<User> viewableUsers = new ArrayList<>();
-        if (activeSessionId.length() == 256){
-            for (Session session : sessionDao.findAll()){
-                if (session.getSessionId().equals(activeSessionId)){
-                    Session activeSession = session;
-                    if (activeSession.getSessionEnd() < System.currentTimeMillis()){
-                        //delete session and direct to login
-                        sessionDao.delete(activeSession);
-                        return "redirect:/login";
-                    }
-                    //reset expiration
-                    activeSession.setSessionEnd();
-                    //save to DB
-                    sessionDao.save(activeSession);
-                    //pass to view
-                    model.addAttribute("activeSession", activeSession);
-                    //redirect if not enough privileges
-                    if (activeSession.getUser().getRole() > 1){
-                        return "redirect:";
-                    }
-                    for (User user : userDao.findAll()){
-                        if (user.getRole() > activeSession.getUser().getRole()){
-                            viewableUsers.add(user);
-                        }
-                    }
-                }
-                //cleanup (might be a bad place)
-                if (session.getSessionEnd() < System.currentTimeMillis()){
-                    if (session.getSessionEnd() < System.currentTimeMillis()) {
-                        //delete session and direct to login
-                        sessionDao.delete(session);
-                    }
+        Iterable<Session> currentSessionList = sessionDao.findAll();
+        String requestedUrl = "/admin/user-maintenance";
+        attributes.addFlashAttribute("requestedUrl", requestedUrl);
+        //check if valid session
+        if (Security.isValidSessionId(activeSessionId, currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            activeSession.refreshSession();
+            sessionDao.save(activeSession);
+            if (activeSession.getUser().getRole() > 1){
+                attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
+                return "redirect:/";
+            }
+            for (User user : userDao.findAll()) {
+                if (user.getRole() > activeSession.getUser().getRole()) {
+                    viewableUsers.add(user);
                 }
             }
+            model.addAttribute("users", viewableUsers);
+            model.addAttribute("title", "User Maintenance");
+            model.addAttribute("activeSession", activeSession);
+            return "admin/user-maintenance";
         }
-        //if no session
-        else {
+        //if session expires
+        else if(Security.isSessionExpired(activeSessionId,currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            sessionDao.delete(activeSession);
+            attributes.addFlashAttribute("loginMessage", Security.sessionTimeoutMessage());
             return "redirect:/login";
         }
-        model.addAttribute("users", viewableUsers);
-        model.addAttribute("title", "Administration");
-        return "/admin/user-maintenance";
+        //if no active session
+        else {
+            attributes.addFlashAttribute("loginMessage", Security.sessionNoSessionMessage());
+            return "redirect:/login";
+        }
     }
     @RequestMapping(value = "modify-user/{userId}", method = RequestMethod.GET)
     public String modifyUserById (@PathVariable int userId, Model model, RedirectAttributes attributes,
@@ -125,6 +113,7 @@ public class AdminController {
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
+            model.addAttribute("title", "Modify" + userId);
             User modifiedUser = userDao.findById(userId).get();
             model.addAttribute("activeSession", activeSession);
             model.addAttribute(modifiedUser);

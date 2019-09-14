@@ -3,6 +3,7 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<h1 th:text="${'Welcome to ' + user.get().getFirstName() + ' ' + user.get().getLastName() + '''s Profile!'}"></h1>
+<h1 th:unless="${ownProfile}" th:text="${'Welcome to ' + viewedUser.get().getFirstName() + ' ' + viewedUser.get().getLastName() + '''s Profile!'}"></h1>
+<h1 th:if="${ownProfile}" th:text="${'Welcome to your profile!'}"></h1>
 </body>
 </html>
