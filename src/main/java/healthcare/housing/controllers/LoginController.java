@@ -32,7 +32,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String processLogin (Model model, @RequestParam("email") String email, @RequestParam("password") String password,
+    public String processLogin (Model model, @RequestParam("requestedUrl") String requestedUrl,@RequestParam("email") String email, @RequestParam("password") String password,
                                 HttpServletResponse response){
         for (User user : userDao.findAll()){
             if (user.getEmail().equals(email)){
@@ -46,7 +46,10 @@ public class LoginController {
                     response.addCookie(new Cookie("ASID", activeSession.getSessionId()));
                     model.addAttribute("activeSession", activeSession);
                     model.addAttribute("loginMessage", "Login successful!");
-                    return "login";
+                    if (!requestedUrl.isEmpty()) {
+                        return "redirect:" + requestedUrl;
+                    }
+                    return "redirect:/profile/" + loggingUser.getId();
                 }
             }
         }

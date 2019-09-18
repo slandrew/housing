@@ -8,6 +8,8 @@
         <input field="email" name="email" type="email"/>
         <label th:for="password">Password:</label>
         <input field="password" name="password" type="password"/>
+        <input th:if="${requestedUrl}" type="hidden" th:value="${requestedUrl}" name="requestedUrl">
+        <input th:unless="${requestedUrl}" type="hidden" name="requestedUrl">
         <input type="submit" value="Login" />
     </form>
 <span th:text="${loginMessage}" class="message"></span>

@@ -35,6 +35,10 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Session> sessionList = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Posting> postingList = new ArrayList<>();
+
     private int emailVerified;
 
     private int role;
@@ -62,7 +66,6 @@ public class User {
     public void addSession (Session session) {
         this.sessionList.add(session);
     }
-
 
     public int getId() {
         return id;
@@ -114,5 +117,13 @@ public class User {
 
     public void setSessionList(List<Session> sessionList) {
         this.sessionList = sessionList;
+    }
+
+    public List<Posting> getPostingList() {
+        return postingList;
+    }
+
+    public void setPostingList(List<Posting> postingList) {
+        this.postingList = postingList;
     }
 }

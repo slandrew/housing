@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<nav th:replace="fragments :: navigation"></nav>
+<form method="post" th:object="${posting}">
+    <div class="form-group">
+        <label th:for="address">Address:</label>
+        <input th:field="*{address}" name="address"/>
+        <span th:errors="*{address}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="city">City:</label>
+        <input th:field="*{city}" name="city"/>
+        <span th:errors="*{city}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="state">State:</label>
+        <input th:field="*{state}" name="state"/>
+        <span th:errors="*{state}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="title">Title:</label>
+        <input th:field="*{title}" name="title"/>
+        <span th:errors="*{title}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="description">Description:</label>
+        <input th:field="*{description}" name="description"/>
+        <span th:errors="*{description}" class="error"></span>
+    </div>
+    <input type="submit" value="Submit" />
+</form>
+</body>
+</html>

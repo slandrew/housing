@@ -22,6 +22,8 @@ public class Session {
     @ManyToOne
     private User user;
 
+    private String requestedUrl;
+
     public long getSessionStart() {
         return sessionStart;
     }
@@ -52,6 +54,11 @@ public class Session {
         this.sessionEnd = (currentTime + 900000);
     }
 
+    public void refreshSession() {
+        long currentTime = System.currentTimeMillis();
+        this.sessionEnd = (currentTime + 900000);
+    }
+
 
     public String getSessionId() {
         return sessionId;
@@ -67,5 +74,13 @@ public class Session {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getRequestedUrl() {
+        return requestedUrl;
+    }
+
+    public void setRequestedUrl(String requestedUrl) {
+        this.requestedUrl = requestedUrl;
     }
 }
