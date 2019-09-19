@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -62,7 +63,8 @@ public class PostingController {
     }
     @RequestMapping(value = "new-posting", method = RequestMethod.POST)
     public String newPostingFormProcess (@ModelAttribute @Valid Posting newPosting, @CookieValue(name="ASID", required=false) String activeSessionId,
-                                         RedirectAttributes attributes, Model model, @RequestParam("postingUserId") int postingUserId) {
+                                         RedirectAttributes attributes, Model model, @RequestParam("postingUserId") int postingUserId,
+                                         @RequestParam("uploadPics")MultipartFile[] uploadPics) {
         Iterable<Session> currentSessionList = sessionDao.findAll();
         String requestedUrl = "/posting/new-posting";
         attributes.addFlashAttribute("requestedUrl", requestedUrl);
@@ -83,6 +85,7 @@ public class PostingController {
         }
         //if session expires
         else if(Security.isSessionExpired(activeSessionId,currentSessionList)){
+            //TODO pass through entered form data after successful login
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             sessionDao.delete(activeSession);
             attributes.addFlashAttribute("loginMessage", Security.sessionTimeoutMessage());

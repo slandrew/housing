@@ -34,6 +34,11 @@
         <input th:field="*{description}" name="description"/>
         <span th:errors="*{description}" class="error"></span>
     </div>
+    <div class="form-group">
+        <label th:for="uploadPic">Upload Picture:</label>
+        <input type="file" accept="image/*" name="uploadPic"/>
+        <span class="error"></span>
+    </div>
     <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
     <input type="submit" value="Submit" />
 </form>
