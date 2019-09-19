@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<form method="post" th:object="${posting}">
+<form enctype="multipart/form-data" method="post" th:object="${posting}">
     <div class="form-group">
         <label th:for="address">Address:</label>
         <input th:field="*{address}" name="address"/>

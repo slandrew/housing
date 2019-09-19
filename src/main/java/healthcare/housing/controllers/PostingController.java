@@ -14,10 +14,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("posting")
 public class PostingController {
+
 
     @Autowired
     private SessionDao sessionDao;
@@ -64,7 +69,7 @@ public class PostingController {
     @RequestMapping(value = "new-posting", method = RequestMethod.POST)
     public String newPostingFormProcess (@ModelAttribute @Valid Posting newPosting, @CookieValue(name="ASID", required=false) String activeSessionId,
                                          RedirectAttributes attributes, Model model, @RequestParam("postingUserId") int postingUserId,
-                                         @RequestParam("uploadPics")MultipartFile[] uploadPics) {
+                                         @RequestParam("uploadPic")MultipartFile uploadPic) throws IOException {
         Iterable<Session> currentSessionList = sessionDao.findAll();
         String requestedUrl = "/posting/new-posting";
         attributes.addFlashAttribute("requestedUrl", requestedUrl);
@@ -77,6 +82,14 @@ public class PostingController {
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
+            String folder = "/Users/infin/postings/" + newPosting.getId()+ "/";
+            Path postingPictureFolder = Paths.get(folder);
+            if (!Files.exists(postingPictureFolder)){
+                Files.createDirectories(postingPictureFolder);
+            }
+            byte[] bytes = uploadPic.getBytes();
+            Path path = Paths.get(folder + uploadPic.getOriginalFilename());
+            Files.write(path, bytes);
             newPosting.setUser(activeSession.getUser());
             postingDao.save(newPosting);
             model.addAttribute("title", "New Posting");
