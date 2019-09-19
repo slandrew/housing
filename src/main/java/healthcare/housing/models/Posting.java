@@ -2,6 +2,7 @@ package healthcare.housing.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,9 @@ public class Posting {
     private User user;
 
     private String description;
+
+    @Size(min = 5, max = 5)
+    private String zipCode;
 
     @ElementCollection
     private List<String> pictureURLs = new ArrayList<>();
@@ -95,5 +99,13 @@ public class Posting {
 
     public void removePictureURL(String URL) {
         this.pictureURLs.remove(URL);
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 }

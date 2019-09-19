@@ -6,7 +6,7 @@
 <h1 th:unless="${ownProfile}" th:text="${'Welcome to ' + viewedUser.get().getFirstName() + ' ' + viewedUser.get().getLastName() + '''s Profile!'}"></h1>
 <h1 th:if="${ownProfile}" th:text="${'Welcome to your profile!'}"></h1>
 <div th:if="${ownProfile}">
-    <a href="/">Home</a>
+    <a href="/posting/new-posting">New Posting</a>
 </div>
 </body>
 </html>

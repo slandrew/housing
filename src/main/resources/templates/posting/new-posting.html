@@ -20,6 +20,11 @@
         <span th:errors="*{state}" class="error"></span>
     </div>
     <div class="form-group">
+        <label th:for="zipCode">Zip Code:</label>
+        <input th:field="*{zipCode}" name="zipCode"/>
+        <span th:errors="*{zipCode}" class="error"></span>
+    </div>
+    <div class="form-group">
         <label th:for="title">Title:</label>
         <input th:field="*{title}" name="title"/>
         <span th:errors="*{title}" class="error"></span>
@@ -29,6 +34,7 @@
         <input th:field="*{description}" name="description"/>
         <span th:errors="*{description}" class="error"></span>
     </div>
+    <input type="hidden" name="postingUserId" th:value="${activeSession.getUser().getId()}">
     <input type="submit" value="Submit" />
 </form>
 </body>

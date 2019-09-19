@@ -9,7 +9,7 @@ public class SessionTest {
         Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
         activeSession.refreshSession();
         sessionDao.save(activeSession);
-        if (activeSession.getUser().getRole() > 1){
+        if (activeSession.getUser().getRole() > SET ROLE){
             attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
             return "redirect:/";
         }
