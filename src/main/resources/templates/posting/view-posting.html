@@ -3,6 +3,8 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<hi th:text="${viewedPosting.getTitle()}"></hi>
+<h1 th:text="${viewedPosting.title}"></h1>
+
+<p th:text="${viewedPosting.description}"></p>
 </body>
 </html>

@@ -20,7 +20,7 @@
         <span th:errors="*{email}" class="error"></span>
         <span th:text="${emailError}" class="error"></span>
     </div>
-    <div th:if="${activeSession} and ${activeSession.getUser().getRole() < 1}" class="form-group">
+    <div th:if="${activeSession} and ${activeSession.user.role < 1}" class="form-group">
         <label th:for="role">Is Admin:</label>
         <input th:if="${user.getRole() == 1}" type="checkbox" name="role" checked/>
         <input th:unless="${user.getRole() == 1}" type="checkbox" name="role"/>

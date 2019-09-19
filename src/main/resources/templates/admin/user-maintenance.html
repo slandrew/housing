@@ -17,7 +17,7 @@
             <td th:text="${user.email}"></td>
             <td th:text="${user.firstName}"></td>
             <td th:text="${user.lastName}">
-            <td><a th:href="@{'/admin/modify-user/' + ${user.getId()}}">Edit</a></td>
+            <td><a th:href="@{'/admin/modify-user/' + ${user.id}}">Edit</a></td>
         </tr>
 
     </table>

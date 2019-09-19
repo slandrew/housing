@@ -10,9 +10,9 @@
 <nav th:fragment="navigation">
     <a href="/">Home</a> |
     <a th:unless="${activeSession}" href="/login">Login</a>
-    <a th:if="${activeSession}" th:href="@{'/profile/' + ${activeSession.getUser().getId()}}">Profile</a>
+    <a th:if="${activeSession}" th:href="@{'/profile/' + ${activeSession.user.id}}">Profile</a>
     <a th:if="${activeSession}" href="/signout">Signout</a>
-    <a th:if="${activeSession} and ${activeSession.getUser().getRole() < 2}" href="/admin">Admin</a>
+    <a th:if="${activeSession} and ${activeSession.user.role < 2}" href="/admin">Admin</a>
     <a th:unless="${activeSession}" href="/signup">Signup</a>
 </nav>
 
