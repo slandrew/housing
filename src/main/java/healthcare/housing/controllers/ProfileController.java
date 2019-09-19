@@ -1,7 +1,9 @@
 package healthcare.housing.controllers;
 
+import healthcare.housing.models.Posting;
 import healthcare.housing.models.Session;
 import healthcare.housing.models.User;
+import healthcare.housing.models.data.PostingDao;
 import healthcare.housing.models.data.SessionDao;
 import healthcare.housing.models.data.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -21,6 +25,9 @@ public class ProfileController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PostingDao postingDao;
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public String signup (@PathVariable int userId, RedirectAttributes attributes,
@@ -40,6 +47,13 @@ public class ProfileController {
             model.addAttribute("activeSession", activeSession);
             Optional<User> viewedUser = userDao.findById(userId);
             model.addAttribute("viewedUser", viewedUser);
+            List<Posting> viewedUserPostings = new ArrayList<>();
+            for (Posting posting : postingDao.findAll()){
+                if (posting.getUser().getId() == userId){
+                    viewedUserPostings.add(posting);
+                }
+            }
+            model.addAttribute("viewedUserPostings", viewedUserPostings);
             model.addAttribute("title", viewedUser.get().getFirstName() +
                     " " + viewedUser.get().getLastName() + "'s Profile");
             if (viewedUser.get().getId() == activeSession.getUser().getId()){

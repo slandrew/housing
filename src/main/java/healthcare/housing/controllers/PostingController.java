@@ -98,7 +98,7 @@ public class PostingController {
     public String viewPosting (@PathVariable int postingId, @CookieValue(name="ASID", required=false) String activeSessionId,
                                RedirectAttributes attributes, Model model) {
         Iterable<Session> currentSessionList = sessionDao.findAll();
-        String requestedUrl = "/posting/view-posting/" + postingId;
+        String requestedUrl = "/posting/" + postingId;
         attributes.addFlashAttribute("requestedUrl", requestedUrl);
         //check if valid session
         if (Security.isValidSessionId(activeSessionId, currentSessionList)){

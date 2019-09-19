@@ -8,5 +8,21 @@
 <div th:if="${ownProfile}">
     <a href="/posting/new-posting">New Posting</a>
 </div>
+<div th:if="${viewedUserPostings}">
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="posting : ${viewedUserPostings}">
+                <td ><a th:text="${posting.title}" th:href="@{'/posting/' + ${posting.id}}"></a></td>
+                <td th:text="${posting.description}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
