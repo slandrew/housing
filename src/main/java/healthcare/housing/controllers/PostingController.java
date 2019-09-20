@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping("posting")
@@ -82,14 +84,26 @@ public class PostingController {
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
-            String folder = "/Users/infin/postings/" + newPosting.getId()+ "/";
-            Path postingPictureFolder = Paths.get(folder);
-            if (!Files.exists(postingPictureFolder)){
-                Files.createDirectories(postingPictureFolder);
+            //TODO Refractor into maybe a class or interface
+            if (!uploadPic.isEmpty()){
+                String folder = "/images/" + activeSession.getUser().getId() + "/";
+                Path postingPictureFolder = Paths.get("C:\\Users\\infin\\housing\\src\\main\\resources\\static" + folder);
+                if (!Files.exists(postingPictureFolder)){
+                    Files.createDirectories(postingPictureFolder);
+                }
+                byte[] bytes = uploadPic.getBytes();
+                String newFileName = new String();
+                String[] splitFileName = uploadPic.getOriginalFilename().split("[.]");
+                String originalFileExtension = splitFileName[1];
+                String alphabet = "kKm8MV6v1jJZzIiNnY4yTt0GgLlDdBbsSHh7cCXxf3FEeUu9Oo5WwaArRQ2qpP";
+                Random rand = new Random();
+                for (int i = 0; i < 128; i++){
+                    newFileName = newFileName + alphabet.charAt(rand.nextInt(alphabet.length()));
+                }
+                Path path = Paths.get("C:\\Users\\infin\\housing\\src\\main\\resources\\static" + folder + newFileName + "." + originalFileExtension);
+                Files.write(path, bytes);
+                newPosting.addPictureURL(folder + newFileName + "." + originalFileExtension);
             }
-            byte[] bytes = uploadPic.getBytes();
-            Path path = Paths.get(folder + uploadPic.getOriginalFilename());
-            Files.write(path, bytes);
             newPosting.setUser(activeSession.getUser());
             postingDao.save(newPosting);
             model.addAttribute("title", "New Posting");
@@ -126,6 +140,8 @@ public class PostingController {
                 return "redirect:/";
             }
             Posting viewedPosting = postingDao.findById(postingId).get();
+            List<String> imageURLs = viewedPosting.getPictureURLs();
+            model.addAttribute("imageURLs", imageURLs);
             model.addAttribute("viewedPosting", viewedPosting);
             model.addAttribute("title", viewedPosting.getTitle());
             model.addAttribute("activeSession", activeSession);

@@ -3,8 +3,12 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
+<div th:if="${imageURLs}">
+    <div th:each="image : ${imageURLs}">
+        <img class="posting-image" th:src="@{${image}}" />
+    </div>
+</div>
 <h1 th:text="${viewedPosting.title}"></h1>
-
 <p th:text="${viewedPosting.description}"></p>
 </body>
 </html>
