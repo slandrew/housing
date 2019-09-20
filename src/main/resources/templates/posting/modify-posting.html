@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<nav th:replace="fragments :: navigation"></nav>
+<form enctype="multipart/form-data" method="post" th:object="${modifiedPosting}">
+    <div class="form-group">
+        <label th:for="address">Address:</label>
+        <input th:field="*{address}" name="address"/>
+        <span th:errors="*{address}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="city">City:</label>
+        <input th:field="*{city}" name="city"/>
+        <span th:errors="*{city}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="state">State:</label>
+        <input th:field="*{state}" name="state"/>
+        <span th:errors="*{state}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="zipCode">Zip Code:</label>
+        <input th:field="*{zipCode}" name="zipCode"/>
+        <span th:errors="*{zipCode}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="title">Title:</label>
+        <input th:field="*{title}" name="title"/>
+        <span th:errors="*{title}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="description">Description:</label>
+        <input th:field="*{description}" name="description"/>
+        <span th:errors="*{description}" class="error"></span>
+    </div>
+    <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
+    <input type="submit" value="Edit" />
+</form>
+<form enctype="multipart/form-data" method="post" action="@{'/posting/add-image/' + ${modifiedPosting.id}}">
+    <div class="form-group">
+        <label th:for="uploadPic">Upload Picture:</label>
+        <input type="file" accept="image/*" name="uploadPic"/>
+        <span class="error"></span>
+    </div>
+    <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
+    <input type="submit" value="Submit" />
+</form>
+</body>
+</html>
