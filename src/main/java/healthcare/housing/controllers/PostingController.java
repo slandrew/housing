@@ -72,7 +72,7 @@ public class PostingController {
     @RequestMapping(value = "new-posting", method = RequestMethod.POST)
     public String newPostingFormProcess (@ModelAttribute @Valid Posting newPosting, @CookieValue(name="ASID", required=false) String activeSessionId,
                                          RedirectAttributes attributes, Model model, @RequestParam("postingUserId") int postingUserId,
-                                         @RequestParam("uploadPic")MultipartFile uploadPic) {
+                                         @RequestParam("uploadPics")MultipartFile[] uploadPics) {
         Iterable<Session> currentSessionList = sessionDao.findAll();
         String requestedUrl = "/posting/new-posting";
         attributes.addFlashAttribute("requestedUrl", requestedUrl);
@@ -85,16 +85,17 @@ public class PostingController {
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
-            //TODO Refractor into maybe a class or interface
-            if (!uploadPic.isEmpty()){
-                String folder = "/images/" + activeSession.getUser().getId() + "/";
-                Image uploadedImage = null;
-                try {
-                    uploadedImage = new Image(uploadPic, folder);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            for (MultipartFile uploadPic : uploadPics){
+                if (!uploadPic.isEmpty()){
+                    String folder = "/images/" + activeSession.getUser().getId() + "/";
+                    Image uploadedImage = null;
+                    try {
+                        uploadedImage = new Image(uploadPic, folder);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    newPosting.addPictureURL(uploadedImage.getNewFileName());
                 }
-                newPosting.addPictureURL(uploadedImage.getNewFileName());
             }
             newPosting.setUser(activeSession.getUser());
             postingDao.save(newPosting);
@@ -192,7 +193,7 @@ public class PostingController {
     @RequestMapping(value = "/add-image/{modifiedPostingId}", method = RequestMethod.POST)
     public String addImageProcess (@PathVariable int modifiedPostingId, @CookieValue(name="ASID", required=false) String activeSessionId,
                                          RedirectAttributes attributes, Model model, @RequestParam("postingUserId") int postingUserId,
-                                         @RequestParam("uploadPic")MultipartFile uploadPic) {
+                                         @RequestParam("uploadPics")MultipartFile[] uploadPics) {
         Iterable<Session> currentSessionList = sessionDao.findAll();
         String requestedUrl = "/posting/add-image/" + modifiedPostingId;
         attributes.addFlashAttribute("requestedUrl", requestedUrl);
@@ -206,15 +207,17 @@ public class PostingController {
                 return "redirect:/";
             }
             Posting modifiedPosting = postingDao.findById(modifiedPostingId).get();
-            if (!uploadPic.isEmpty()){
-                String folder = "/images/" + activeSession.getUser().getId() + "/";
-                Image uploadedImage = null;
-                try {
-                    uploadedImage = new Image(uploadPic, folder);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            for (MultipartFile uploadPic : uploadPics){
+                if (!uploadPic.isEmpty()){
+                    String folder = "/images/" + activeSession.getUser().getId() + "/";
+                    Image uploadedImage = null;
+                    try {
+                        uploadedImage = new Image(uploadPic, folder);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    modifiedPosting.addPictureURL(uploadedImage.getNewFileName());
                 }
-                modifiedPosting.addPictureURL(uploadedImage.getNewFileName());
             }
             postingDao.save(modifiedPosting);
             model.addAttribute("title", "New Posting");
