@@ -1,5 +1,6 @@
 package healthcare.housing.controllers;
 
+import healthcare.housing.models.Role;
 import healthcare.housing.models.Session;
 import healthcare.housing.models.User;
 import healthcare.housing.models.data.SessionDao;
@@ -37,7 +38,7 @@ public class AdminController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 1){
+            if (activeSession.getUser().getRole().getIntValue() > 1){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
@@ -70,12 +71,12 @@ public class AdminController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 1){
+            if (activeSession.getUser().getRole().getIntValue() > 1){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
             for (User user : userDao.findAll()) {
-                if (user.getRole() > activeSession.getUser().getRole()) {
+                if (user.getRole().getIntValue() > activeSession.getUser().getRole().getIntValue()) {
                     viewableUsers.add(user);
                 }
             }
@@ -109,10 +110,11 @@ public class AdminController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 1){
+            if (activeSession.getUser().getRole().getIntValue() > 1){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
+            model.addAttribute("roles", Role.values());
             model.addAttribute("title", "Modify" + userId);
             User modifiedUser = userDao.findById(userId).get();
             model.addAttribute("activeSession", activeSession);

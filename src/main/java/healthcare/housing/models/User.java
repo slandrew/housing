@@ -41,18 +41,18 @@ public class User {
 
     private int emailVerified;
 
-    private int role;
+    private Role role;
 
-    public int getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
     public User() {
-        this.role = 2;
+        this.role = Role.GUEST;
     }
 
     public int getEmailVerified() {

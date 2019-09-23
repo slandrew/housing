@@ -41,7 +41,7 @@ public class PostingController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 2){
+            if (activeSession.getUser().getRole().getIntValue() > 2){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
@@ -77,7 +77,7 @@ public class PostingController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 2 || activeSession.getUser().getId() != postingUserId){
+            if (activeSession.getUser().getRole().getIntValue() > 2 || activeSession.getUser().getId() != postingUserId){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
@@ -124,7 +124,7 @@ public class PostingController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 2){
+            if (activeSession.getUser().getRole().getIntValue() > 2){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
@@ -163,7 +163,7 @@ public class PostingController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 2 || activeSession.getUser().getId() != postingDao.findById(postingId).get().getUser().getId()){
+            if (activeSession.getUser().getRole().getIntValue() > 2 || activeSession.getUser().getId() != postingDao.findById(postingId).get().getUser().getId()){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
@@ -202,7 +202,7 @@ public class PostingController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 2 || activeSession.getUser().getId() != postingUserId){
+            if (activeSession.getUser().getRole().getIntValue() > 2 || activeSession.getUser().getId() != postingUserId){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
@@ -250,7 +250,7 @@ public class PostingController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 2 || activeSession.getUser().getId() != postingUserId){
+            if (activeSession.getUser().getRole().getIntValue() > 2 || activeSession.getUser().getId() != postingUserId){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }
@@ -287,7 +287,7 @@ public class PostingController {
             Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
             activeSession.refreshSession();
             sessionDao.save(activeSession);
-            if (activeSession.getUser().getRole() > 2 || activeSession.getUser().getId() != postingUserId){
+            if (activeSession.getUser().getRole().getIntValue() > 2 || activeSession.getUser().getId() != postingUserId){
                 attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
                 return "redirect:/";
             }

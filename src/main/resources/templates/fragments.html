@@ -13,7 +13,7 @@
     <a th:unless="${activeSession}" href="/login">Login</a>
     <a th:if="${activeSession}" th:href="@{'/profile/' + ${activeSession.user.id}}">Profile</a>
     <a th:if="${activeSession}" href="/signout">Signout</a>
-    <a th:if="${activeSession} and ${activeSession.user.role < 2}" href="/admin">Admin</a>
+    <a th:if="${activeSession} and ${activeSession.user.role.intValue < 2}" href="/admin">Admin</a>
     <a th:unless="${activeSession}" href="/signup">Signup</a>
 </nav>
 
