@@ -1,9 +1,7 @@
 package healthcare.housing.controllers;
 
 
-import healthcare.housing.models.Image;
-import healthcare.housing.models.Posting;
-import healthcare.housing.models.Session;
+import healthcare.housing.models.*;
 import healthcare.housing.models.data.PostingDao;
 import healthcare.housing.models.data.SessionDao;
 import healthcare.housing.models.data.UserDao;
@@ -16,11 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Random;
 
 @Controller
 @RequestMapping("posting")
@@ -52,6 +46,8 @@ public class PostingController {
                 return "redirect:/";
             }
             model.addAttribute(new Posting());
+            model.addAttribute("states", State.values());
+            model.addAttribute("amenities", Amenity.values());
             model.addAttribute("title", "New Posting");
             model.addAttribute("activeSession", activeSession);
             return "posting/new-posting";
@@ -133,7 +129,9 @@ public class PostingController {
                 return "redirect:/";
             }
             Posting viewedPosting = postingDao.findById(postingId).get();
+            List<Amenity> amenities = viewedPosting.getAmenities();
             List<String> imageURLs = viewedPosting.getPictureURLs();
+            model.addAttribute("amenities", amenities);
             model.addAttribute("imageURLs", imageURLs);
             model.addAttribute("viewedPosting", viewedPosting);
             model.addAttribute("title", viewedPosting.getTitle());
@@ -171,6 +169,8 @@ public class PostingController {
             }
             Posting modifiedPosting = postingDao.findById(postingId).get();
             List<String> imageURLs = modifiedPosting.getPictureURLs();
+            model.addAttribute("states", State.values());
+            model.addAttribute("amenities", Amenity.values());
             model.addAttribute("imageURLs", imageURLs);
             model.addAttribute("title", "Modify Posting" + modifiedPosting.getId());
             model.addAttribute("activeSession", activeSession);
@@ -298,6 +298,7 @@ public class PostingController {
             postToBeModified.setState(modifiedPosting.getState());
             postToBeModified.setTitle(modifiedPosting.getTitle());
             postToBeModified.setZipCode(modifiedPosting.getZipCode());
+            postToBeModified.setAmenities(modifiedPosting.getAmenities());
             postingDao.save(postToBeModified);
             model.addAttribute("title", "New Posting");
             model.addAttribute("activeSession", activeSession);

@@ -9,6 +9,11 @@
         <img class="posting-image" th:src="@{${image}}" />
     </div>
 </div>
+<ul th:if="${amenities}">
+    <div th:each="amenity : ${amenities}">
+        <li th:text="${amenity.name}"></li>
+    </div>
+</ul>
 <h1 th:text="${viewedPosting.title}"></h1>
 <p th:text="${viewedPosting.description}"></p>
 </body>

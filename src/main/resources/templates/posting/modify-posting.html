@@ -34,6 +34,10 @@
         <input th:field="*{description}" name="description"/>
         <span th:errors="*{description}" class="error"></span>
     </div>
+    <div class="form-group">
+        <label th:for="amenities">Amenities:</label>
+        <input type="checkbox" th:checked="${#lists.contains(amenities, amenity)}" th:field="*{amenities}" th:each="amenity : ${amenities}" th:text="${amenity.name}" th:value="${amenity}"></input>
+    </div>
     <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
     <input type="hidden" name="modifiedPostingId" th:value="${modifiedPosting.id}">
     <input type="submit" value="Edit" />

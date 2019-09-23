@@ -18,7 +18,7 @@ public class Posting {
 
     private String city;
 
-    private String state;
+    private State state;
 
     @ManyToOne
     private User user;
@@ -30,6 +30,9 @@ public class Posting {
 
     @ElementCollection
     private List<String> pictureURLs = new ArrayList<>();
+
+    @ElementCollection
+    private List<Amenity> amenities = new ArrayList<>();
 
     private String title;
 
@@ -49,11 +52,11 @@ public class Posting {
         this.city = city;
     }
 
-    public String getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(State state) {
         this.state = state;
     }
 
@@ -79,6 +82,14 @@ public class Posting {
 
     public void setPictureURLs(List<String> pictureURLs) {
         this.pictureURLs = pictureURLs;
+    }
+
+    public List<Amenity> getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(List<Amenity> amenities) {
+        this.amenities = amenities;
     }
 
     public String getTitle() {
