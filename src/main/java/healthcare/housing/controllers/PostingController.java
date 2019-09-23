@@ -158,7 +158,7 @@ public class PostingController {
                                @CookieValue(name="ASID", required=false) String activeSessionId,
                                RedirectAttributes attributes, Model model) {
         Iterable<Session> currentSessionList = sessionDao.findAll();
-        String requestedUrl = "/posting/new-posting";
+        String requestedUrl = "/modify-posting/" + postingId;
         attributes.addFlashAttribute("requestedUrl", requestedUrl);
         //check if valid session
         if (Security.isValidSessionId(activeSessionId, currentSessionList)){
@@ -220,7 +220,7 @@ public class PostingController {
                 }
             }
             postingDao.save(modifiedPosting);
-            model.addAttribute("title", "New Posting");
+            model.addAttribute("title", "Modify Posting" + modifiedPostingId);
             model.addAttribute("activeSession", activeSession);
             return "redirect:/posting/modify-posting/" + modifiedPosting.getId();
         }
@@ -243,7 +243,7 @@ public class PostingController {
                                    RedirectAttributes attributes, Model model, @RequestParam("postingUserId") int postingUserId,
                                       @RequestParam("imageURL") String removedImageURL) {
         Iterable<Session> currentSessionList = sessionDao.findAll();
-        String requestedUrl = "/posting/add-image/" + modifiedPostingId;
+        String requestedUrl = "/posting/remove-image/" + modifiedPostingId;
         attributes.addFlashAttribute("requestedUrl", requestedUrl);
         //check if valid session
         if (Security.isValidSessionId(activeSessionId, currentSessionList)){
@@ -257,9 +257,51 @@ public class PostingController {
             Posting modifiedPosting = postingDao.findById(modifiedPostingId).get();
             modifiedPosting.removePictureURL(removedImageURL);
             postingDao.save(modifiedPosting);
-            model.addAttribute("title", "New Posting");
+            model.addAttribute("title", "Modify Posting" + modifiedPosting.getId());
             model.addAttribute("activeSession", activeSession);
             return "redirect:/posting/modify-posting/" + modifiedPosting.getId();
+        }
+        //if session expires
+        else if(Security.isSessionExpired(activeSessionId,currentSessionList)){
+            //TODO pass through entered form data after successful login
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            sessionDao.delete(activeSession);
+            attributes.addFlashAttribute("loginMessage", Security.sessionTimeoutMessage());
+            return "redirect:/login";
+        }
+        //if no active session
+        else {
+            attributes.addFlashAttribute("loginMessage", Security.sessionNoSessionMessage());
+            return "redirect:/login";
+        }
+    }
+    @RequestMapping(value = "modify-posting/{modifiedPostingId}", method = RequestMethod.POST)
+    public String modifyPostingFormProcess (@ModelAttribute @Valid Posting modifiedPosting, @CookieValue(name="ASID", required=false) String activeSessionId,
+                                         RedirectAttributes attributes, Model model, @RequestParam("postingUserId") int postingUserId,
+                                            @RequestParam("modifiedPostingId") int modifiedPostingId) {
+        Iterable<Session> currentSessionList = sessionDao.findAll();
+        String requestedUrl = "/posting/new-posting";
+        attributes.addFlashAttribute("requestedUrl", requestedUrl);
+        //check if valid session
+        if (Security.isValidSessionId(activeSessionId, currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            activeSession.refreshSession();
+            sessionDao.save(activeSession);
+            if (activeSession.getUser().getRole() > 2 || activeSession.getUser().getId() != postingUserId){
+                attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
+                return "redirect:/";
+            }
+            Posting postToBeModified = postingDao.findById(modifiedPostingId).get();
+            postToBeModified.setAddress(modifiedPosting.getAddress());
+            postToBeModified.setCity(modifiedPosting.getCity());
+            postToBeModified.setDescription(modifiedPosting.getDescription());
+            postToBeModified.setState(modifiedPosting.getState());
+            postToBeModified.setTitle(modifiedPosting.getTitle());
+            postToBeModified.setZipCode(modifiedPosting.getZipCode());
+            postingDao.save(postToBeModified);
+            model.addAttribute("title", "New Posting");
+            model.addAttribute("activeSession", activeSession);
+            return "redirect:/posting/modify-posting/" + postToBeModified.getId();
         }
         //if session expires
         else if(Security.isSessionExpired(activeSessionId,currentSessionList)){
