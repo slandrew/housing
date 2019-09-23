@@ -37,9 +37,19 @@
     <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
     <input type="submit" value="Edit" />
 </form>
-<form enctype="multipart/form-data" method="post" action="@{'/posting/add-image/' + ${modifiedPosting.id}}">
+<div th:if="${imageURLs}">
+    <div th:each="image : ${imageURLs}">
+        <img class="posting-image" th:src="@{${image}}" />
+        <form method="post" th:action="@{/posting/remove-image/} + ${modifiedPosting.id}">
+            <input type="submit" value="Delete Image" />
+            <input type="hidden" name="imageURL" th:value="${image}">
+            <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
+        </form>
+    </div>
+</div>
+<form enctype="multipart/form-data" method="post" th:action="@{/posting/add-image/} + ${modifiedPosting.id}">
     <div class="form-group">
-        <label th:for="uploadPic">Upload Picture:</label>
+        <label th:for="uploadPic">Upload More Pictures:</label>
         <input type="file" accept="image/*" name="uploadPic"/>
         <span class="error"></span>
     </div>
