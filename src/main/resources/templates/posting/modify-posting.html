@@ -15,9 +15,12 @@
         <span th:errors="*{city}" class="error"></span>
     </div>
     <div class="form-group">
-        <label th:for="state">State:</label>
-        <input th:field="*{state}" name="state"/>
-        <span th:errors="*{state}" class="error"></span>
+        <div class="form-group">
+            <label th:for="state">State:</label>
+            <select th:field="*{state}">
+                <option th:each="state : ${states}" th:text="${state.name}" th:value="${state}"></option>
+            </select>
+        </div>
     </div>
     <div class="form-group">
         <label th:for="zipCode">Zip Code:</label>
@@ -31,7 +34,7 @@
     </div>
     <div class="form-group">
         <label th:for="description">Description:</label>
-        <input th:field="*{description}" name="description"/>
+        <textarea rows="5" cols="50" th:field="*{description}" name="description"/>
         <span th:errors="*{description}" class="error"></span>
     </div>
     <div class="form-group">
@@ -40,8 +43,9 @@
     </div>
     <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
     <input type="hidden" name="modifiedPostingId" th:value="${modifiedPosting.id}">
-    <input type="submit" value="Edit" />
+    <input type="submit" value="Save Changes" />
 </form>
+<h1>Uploaded Images</h1>
 <div th:if="${imageURLs}">
     <div th:each="image : ${imageURLs}">
         <img class="posting-image" th:src="@{${image}}" />
@@ -54,8 +58,8 @@
 </div>
 <form enctype="multipart/form-data" method="post" th:action="@{/posting/add-image/} + ${modifiedPosting.id}">
     <div class="form-group">
-        <label th:for="uploadPics">Upload More Pictures:</label>
-        <input type="file" accept="image/*" name="uploadPics" multiple />
+        <label th:for="uploadPics">Add More Pictures:</label>
+        <input type="file" accept="image/*" name="uploadPics" value="Add pictures..." multiple />
         <span class="error"></span>
     </div>
     <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">

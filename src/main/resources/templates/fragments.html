@@ -7,15 +7,15 @@
 
 </head>
 <body>
-
-<nav th:fragment="navigation">
-    <a href="/">Home</a> |
-    <a th:unless="${activeSession}" href="/login">Login</a>
-    <a th:if="${activeSession}" th:href="@{'/profile/' + ${activeSession.user.id}}">Profile</a>
-    <a th:if="${activeSession}" href="/signout">Signout</a>
-    <a th:if="${activeSession} and ${activeSession.user.role.intValue < 2}" href="/admin">Admin</a>
-    <a th:unless="${activeSession}" href="/signup">Signup</a>
+<div th:fragment="navigation" id="nav-holder">
+<nav id="nav-menu">
+    <a href="/" class="nav-button" id="home-link">Home</a>
+    <a th:unless="${activeSession}" href="/login" class="nav-button">Login</a>
+    <a th:if="${activeSession}" th:href="@{'/profile/' + ${activeSession.user.id}}" class="nav-button">Profile</a>
+    <a th:if="${activeSession}" href="/signout" class="nav-button">Signout</a>
+    <a th:if="${activeSession} and ${activeSession.user.role.intValue < 2}" href="/admin" class="nav-button">Admin</a>
+    <a th:unless="${activeSession}" href="/signup" class="nav-button">Signup</a>
 </nav>
-
+</div>
 </body>
 </html>

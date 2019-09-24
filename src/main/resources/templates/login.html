@@ -5,12 +5,12 @@
 <nav th:replace="fragments :: navigation"></nav>
     <form method="post">
         <label th:for="email">Email:</label>
-        <input field="email" name="email" type="email"/>
+        <input field="email" name="email" type="email"/></br>
         <label th:for="password">Password:</label>
-        <input field="password" name="password" type="password"/>
+        <input field="password" name="password" type="password"/></br>
         <input th:if="${requestedUrl}" type="hidden" th:value="${requestedUrl}" name="requestedUrl">
         <input th:unless="${requestedUrl}" type="hidden" name="requestedUrl">
-        <input type="submit" value="Login" />
+        <input type="submit" value="Login" class="submit-button"/>
     </form>
 <span th:text="${loginMessage}" class="message"></span>
 </body>
