@@ -4,10 +4,12 @@
 <body>
 <nav th:replace="fragments :: navigation"></nav>
 <a th:if="${activeSession.user.id == viewedPosting.user.id}" th:text="Edit" th:href="@{'/posting/modify-posting/' + ${viewedPosting.id}}"></a>
-<div th:if="${imageURLs}">
-    <div th:each="image : ${imageURLs}">
-        <img class="posting-image" th:src="@{${image}}" />
-    </div>
+<div class="image-container" th:if="${imageURLs}">
+    <ul class="thumbnail-list">
+        <li th:each="image : ${imageURLs}">
+            <img class="posting-thumbnail" th:src="@{${image}}" />
+        </li>
+    </ul>
 </div>
 <ul th:if="${amenities}">
     <div th:each="amenity : ${amenities}">
