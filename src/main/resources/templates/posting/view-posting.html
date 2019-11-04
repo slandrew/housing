@@ -4,16 +4,57 @@
 <body>
 <nav th:replace="fragments :: navigation"></nav>
 <a th:if="${activeSession.user.id == viewedPosting.user.id}" th:text="Edit" th:href="@{'/posting/modify-posting/' + ${viewedPosting.id}}"></a>
-<div class="image-container" th:if="${imageURLs}">
+<div class="slide-holder">
+    <img th:each="image : ${imageURLs}" class="posting-slide" th:src="@{${image}}">
+    <button class="image-button" id="image-button-previous" onclick="plusDivs(-1)">❮</button>
+    <button class="image-button" id="image-button-next" onclick="plusDivs(1)">❯</button>
+</div>
+<div class="w3-center">
+    <div class="w3-section">
+        <button class="w3-button w3-light-grey" onclick="plusDivs(-1)">❮ Prev</button>
+        <button class="w3-button w3-light-grey" onclick="plusDivs(1)">Next ❯</button>
+    </div>
+    <!--<button th:each="image : ${imageURLs}" class="w3-button demo" onclick="currentDiv(1)">1</button>-->
+    <input  class="posting-thumbnail" type="image" th:each="image,i : ${imageURLs}" th:src="@{${image}}" th:onclick="currentDiv([[${i.index + 1}]])"/>
+</div>
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("posting-slide");
+  var dots = document.getElementsByClassName("demo");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" w3-red", "");
+  }
+  x[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " w3-red";
+}
+</script>
+<!---<div class="image-container" th:if="${imageURLs}">
     <ul class="thumbnail-list">
         <li th:each="image : ${imageURLs}">
             <img class="posting-thumbnail" th:src="@{${image}}" />
         </li>
     </ul>
-</div>
+</div>-->
 <ul th:if="${amenities}">
     <div th:each="amenity : ${amenities}">
-        <li th:text="${amenity.name}"></li>
+        <li th:text="${amenity.name}"></li></br>
     </div>
 </ul>
 <h1 th:text="${viewedPosting.title}"></h1>

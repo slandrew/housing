@@ -10,7 +10,7 @@
 <div th:fragment="navigation">
     <div th:fragment="navigation" id="nav-holder">
     <ul id="nav-menu">
-        <li><a href="/" class="nav-button" id="home-link">&#8962</a></li>
+        <li><a href="/" class="nav-link" id="home-link">&#8962</a></li>
         <li th:unless="${activeSession}"><a href="/login" class="nav-link">Login</a></li>
         <li th:if="${activeSession}"><a th:href="@{'/profile/' + ${activeSession.user.id}}" class="nav-link">Profile</a></li>
         <li th:if="${activeSession}"><a href="/signout" class="nav-link">Signout</a></li>
