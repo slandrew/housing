@@ -48,7 +48,7 @@
 <h1>Uploaded Images</h1>
 <div th:if="${imageURLs}">
     <div th:each="image : ${imageURLs}">
-        <img class="posting-image" th:src="@{${image}}" />
+        <img class="posting-thumbnail" th:src="@{${image}}" />
         <form method="post" th:action="@{/posting/remove-image/} + ${modifiedPosting.id}">
             <input type="submit" value="Delete Image" />
             <input type="hidden" name="imageURL" th:value="${image}">

@@ -3,18 +3,14 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<a th:if="${activeSession.user.id == viewedPosting.user.id}" th:text="Edit" th:href="@{'/posting/modify-posting/' + ${viewedPosting.id}}"></a>
+<a id="posting-edit" th:if="${activeSession.user.id == viewedPosting.user.id}" th:text="Edit" th:href="@{'/posting/modify-posting/' + ${viewedPosting.id}}"></a>
+<h1 th:text="${viewedPosting.title}"></h1>
 <div class="slide-holder">
     <img th:each="image : ${imageURLs}" class="posting-slide" th:src="@{${image}}">
     <button class="image-button" id="image-button-previous" onclick="plusDivs(-1)">❮</button>
     <button class="image-button" id="image-button-next" onclick="plusDivs(1)">❯</button>
 </div>
-<div class="w3-center">
-    <div class="w3-section">
-        <button class="w3-button w3-light-grey" onclick="plusDivs(-1)">❮ Prev</button>
-        <button class="w3-button w3-light-grey" onclick="plusDivs(1)">Next ❯</button>
-    </div>
-    <!--<button th:each="image : ${imageURLs}" class="w3-button demo" onclick="currentDiv(1)">1</button>-->
+<div class="thumbnail-container">
     <input  class="posting-thumbnail" type="image" th:each="image,i : ${imageURLs}" th:src="@{${image}}" th:onclick="currentDiv([[${i.index + 1}]])"/>
 </div>
 <script>
@@ -52,12 +48,13 @@ function showDivs(n) {
         </li>
     </ul>
 </div>-->
-<ul th:if="${amenities}">
+<h2>Description</h2>
+<p th:text="${viewedPosting.description}"></p>
+<h2>Amenities</h2>
+<ul th:if="${amenities}" class="amenities-list">
     <div th:each="amenity : ${amenities}">
-        <li th:text="${amenity.name}"></li></br>
+        <li th:text="${amenity.name}"></li>
     </div>
 </ul>
-<h1 th:text="${viewedPosting.title}"></h1>
-<p th:text="${viewedPosting.description}"></p>
 </body>
 </html>
