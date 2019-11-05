@@ -231,3 +231,21 @@ footer {
     color: black;
     text-shadow: 2px 2px blue;
 }
+.form-group label{
+    display: inline-block;
+    float: left;
+    clear: left;
+}
+.form-group input, select{
+    display: inline-block;
+    float: right;
+    clear: left;
+    clear: right;
+}
+.form-group textarea{
+    display: inline-block;
+}
+.modify-form {
+    width: 24em;
+    margin: auto;
+}
