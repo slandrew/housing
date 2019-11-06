@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<form class="modify-form" enctype="multipart/form-data" method="post" th:object="${modifiedPosting}">
+<form class="block-form" enctype="multipart/form-data" method="post" th:object="${modifiedPosting}">
     <div class="form-group">
         <label th:for="address">Address:</label>
         <input th:field="*{address}" name="address"/>
@@ -45,18 +45,20 @@
     <input type="hidden" name="modifiedPostingId" th:value="${modifiedPosting.id}">
     <input type="submit" value="Save Changes" />
 </form>
-<h1>Uploaded Images</h1>
-<div th:if="${imageURLs}">
-    <div th:each="image : ${imageURLs}">
+<h2>Uploaded Images</h2>
+<div th:if="${imageURLs}" class="modified-images">
+    <div th:each="image : ${imageURLs}" class="modified-image-container">
         <img class="posting-thumbnail" th:src="@{${image}}" />
         <form method="post" th:action="@{/posting/remove-image/} + ${modifiedPosting.id}">
-            <input type="submit" value="Delete Image" />
+            <div class="form-group" id="submit-container">
+                <input type="submit" id="submit-button" value="Delete Image" />
+            </div>
             <input type="hidden" name="imageURL" th:value="${image}">
             <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
         </form>
     </div>
 </div>
-<form enctype="multipart/form-data" method="post" th:action="@{/posting/add-image/} + ${modifiedPosting.id}">
+<form class="block-form" enctype="multipart/form-data" method="post" th:action="@{/posting/add-image/} + ${modifiedPosting.id}">
     <div class="form-group">
         <label th:for="uploadPics">Add More Pictures:</label>
         <input type="file" accept="image/*" name="uploadPics" value="Add pictures..." multiple />

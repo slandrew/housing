@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<form method="post" th:object="${user}">
+<form class="block-form" method="post" th:object="${user}">
     <div class="form-group">
         <label th:for="firstName">First Name:</label>
         <input th:field="*{firstName}" name="firstName"/>
@@ -27,7 +27,9 @@
         </select>
         <span th:errors="*{role}" class="error"></span>
     </div>
-    <input type="submit" value="Modify User" />
+    <div class="form-group" id="submit-container">
+        <input type="submit" id="submit-button" value="Modify User" />
+    </div>
 </form>
 </body>
 </html>

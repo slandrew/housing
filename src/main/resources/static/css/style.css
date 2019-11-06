@@ -231,6 +231,9 @@ footer {
     color: black;
     text-shadow: 2px 2px blue;
 }
+.form-group{
+    padding: 1px;
+}
 .form-group label{
     display: inline-block;
     float: left;
@@ -245,7 +248,23 @@ footer {
 .form-group textarea{
     display: inline-block;
 }
-.modify-form {
+.block-form {
     width: 24em;
     margin: auto;
+}
+#submit-container{
+    position: relative;
+    margin: auto;
+    width: 100%;
+}
+#submit-button{
+    margin: auto;
+    float: none;
+}
+.modified-images{
+    display: inline-block;
+}
+.modified-image-container{
+    float: left;
+    width: 33.33%;
 }
