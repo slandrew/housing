@@ -268,3 +268,21 @@ footer {
     float: left;
     width: 33.33%;
 }
+#map {
+    height: 24em;
+    width: 100%;
+}
+#map-container {
+    margin: auto;
+    width: 90%;
+    min-width: 40em;
+}
+#map-input-container {
+    margin: auto;
+    width: 90%;
+    min-width: 40em;
+}
+#map-input {
+    width: 50%;
+    text-align: center;
+}
