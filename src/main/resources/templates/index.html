@@ -54,6 +54,7 @@
           markers = [];
 
           // For each place, get the icon, name and location.
+          var addresses = ["2709 Droste Rd.", "new york city"];
           var bounds = new google.maps.LatLngBounds();
           places.forEach(function(place) {
             if (!place.geometry) {
@@ -75,15 +76,27 @@
               title: place.name,
               position: place.geometry.location
             }));
-
-            if (place.geometry.viewport) {
-              // Only geocodes have viewport.
-              bounds.union(place.geometry.viewport);
-            } else {
-              bounds.extend(place.geometry.location);
-            }
+            map.setCenter(place.geometry.location);
+            map.setZoom(10);
+            geocoder = new google.maps.Geocoder();
+            pinAddresses(geocoder, map);
           });
-          map.fitBounds(bounds);
+          function pinAddresses(geocoder, map) {
+                var i;
+                for (i = 0; i < addresses.length; i++){
+                    geocoder.geocode({'address': addresses[i]}, function(results, status) {
+                        if (status === 'OK') {
+                            var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location
+                            });
+                        } else {
+                            alert('Geocode was not successful for the following reason: ' + status);
+                        }
+                    });
+                }
+          }
+
         });
       }
 
@@ -91,6 +104,8 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLYHHm_3-YHbKJHeM0FavvvVUYaQOBl6I&libraries=places&callback=initAutocomplete"
             async defer></script>
 </div>
-
+<form action="/search?lat=" method="get">
+    <input type="submit" value="Search">
+</form>
 </body>
 </html>

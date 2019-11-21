@@ -276,11 +276,14 @@ footer {
     margin: auto;
     width: 90%;
     min-width: 40em;
+    max-width: 60em;
 }
 #map-input-container {
     margin: auto;
     width: 90%;
     min-width: 40em;
+    padding-top: 2em;
+    padding-bottom: 2em;
 }
 #map-input {
     width: 50%;

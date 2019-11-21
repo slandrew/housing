@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<nav th:replace="fragments :: navigation"></nav>
+<div id="map-container">
+    <div id="map">
+        <script th:inline="javascript">
+        /*<![CDATA[*/
+            var addresses = ["2709 Droste Rd.", "new york city"];
+            function initMap() {
+                var uluru = {lat: -25.344, lng: 131.036};
+                var map = new google.maps.Map(document.getElementById('map'), {zoom: 4, center: uluru});
+                geocoder = new google.maps.Geocoder();
+                pinAddresses(geocoder, map);
+            }
+
+            function pinAddresses(geocoder, map) {
+                var i;
+                for (i = 0; i < addresses.length; i++){
+                    geocoder.geocode({'address': addresses[i]}, function(results, status) {
+                        if (status === 'OK') {
+                            map.setCenter(results[0].geometry.location);
+                            var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location
+                            });
+                        } else {
+                            alert('Geocode was not successful for the following reason: ' + status);
+                        }
+                    });
+                }
+            }
+    /*]]>*/
+    </script>
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLYHHm_3-YHbKJHeM0FavvvVUYaQOBl6I&callback=initMap"
+                async defer></script>
+    </div>
+</div>
+</body>
+</html>
