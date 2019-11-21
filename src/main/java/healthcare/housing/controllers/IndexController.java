@@ -1,7 +1,9 @@
 package healthcare.housing.controllers;
 
+import healthcare.housing.models.Posting;
 import healthcare.housing.models.Session;
 import healthcare.housing.models.State;
+import healthcare.housing.models.data.PostingDao;
 import healthcare.housing.models.data.SessionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,9 @@ public class IndexController {
 
     @Autowired
     private SessionDao sessionDao;
+
+    @Autowired
+    private PostingDao postingDao;
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index (Model model, @CookieValue(name="ASID", required=false) String activeSessionId) {
@@ -35,6 +40,7 @@ public class IndexController {
             sessionDao.delete(activeSession);
             model.addAttribute("redirectMessage", Security.sessionTimeoutMessage());
         }
+        model.addAttribute("postingList", postingDao.findAll());
         return "index";
     }
     @RequestMapping(value="", method = RequestMethod.POST)
