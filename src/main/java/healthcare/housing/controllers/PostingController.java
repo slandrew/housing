@@ -318,4 +318,39 @@ public class PostingController {
             return "redirect:/login";
         }
     }
+    @RequestMapping(value= "book-posting/{postingId}", method = RequestMethod.GET)
+    public String bookPosting (@PathVariable int postingId,
+                                            @CookieValue(name="ASID", required=false) String activeSessionId,
+                                            RedirectAttributes attributes, Model model) {
+        Iterable<Session> currentSessionList = sessionDao.findAll();
+        String requestedUrl = "/book-posting/" + postingId;
+        attributes.addFlashAttribute("requestedUrl", requestedUrl);
+        //check if valid session
+        if (Security.isValidSessionId(activeSessionId, currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            activeSession.refreshSession();
+            sessionDao.save(activeSession);
+            if (activeSession.getUser().getRole().getIntValue() > 2 || activeSession.getUser().getId() == postingDao.findById(postingId).get().getUser().getId()){
+                attributes.addFlashAttribute("redirectMessage", Security.sessionNoPrivilege());
+                return "redirect:/";
+            }
+            Posting modifiedPosting = postingDao.findById(postingId).get();
+            model.addAttribute("title", "Book Posting" + modifiedPosting.getId());
+            model.addAttribute("activeSession", activeSession);
+            model.addAttribute("modifiedPosting", modifiedPosting);
+            return "posting/book-posting";
+        }
+        //if session expires
+        else if(Security.isSessionExpired(activeSessionId,currentSessionList)){
+            Session activeSession = Security.getActiveSession(activeSessionId, currentSessionList);
+            sessionDao.delete(activeSession);
+            attributes.addFlashAttribute("loginMessage", Security.sessionTimeoutMessage());
+            return "redirect:/login";
+        }
+        //if no active session
+        else {
+            attributes.addFlashAttribute("loginMessage", Security.sessionNoSessionMessage());
+            return "redirect:/login";
+        }
+    }
 }

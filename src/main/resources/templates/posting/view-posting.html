@@ -4,6 +4,7 @@
 <body>
 <nav th:replace="fragments :: navigation"></nav>
 <a id="posting-edit" th:if="${activeSession.user.id == viewedPosting.user.id}" th:text="Edit" th:href="@{'/posting/modify-posting/' + ${viewedPosting.id}}"></a>
+<a th:unless="${activeSession.user.id == viewedPosting.user.id}" th:href="@{'/posting/book-posting/' + ${viewedPosting.id}}">Book Now!</a>
 <h1 th:text="${viewedPosting.title}"></h1>
 <div class="slide-holder">
     <img th:each="image : ${imageURLs}" class="posting-slide" th:src="@{${image}}">

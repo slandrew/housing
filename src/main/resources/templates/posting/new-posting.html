@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <nav th:replace="fragments :: navigation"></nav>
-<form enctype="multipart/form-data" method="post" th:object="${posting}">
+<form class="block-form" enctype="multipart/form-data" method="post" th:object="${posting}">
     <div class="form-group">
         <label th:for="address">Address:</label>
         <input th:field="*{address}" name="address"/>
@@ -32,10 +32,10 @@
     </div>
     <div class="form-group">
         <label th:for="description">Description:</label>
-        <input th:field="*{description}" name="description"/>
+        <textarea rows="5" cols="50" th:field="*{description}" name="description"/>
         <span th:errors="*{description}" class="error"></span>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="amenities-box">
         <label th:for="amenities">Amenities:</label>
         <input type="checkbox" th:field="*{amenities}" th:each="amenity : ${amenities}" th:text="${amenity.name}" th:value="${amenity}"></input>
     </div>
