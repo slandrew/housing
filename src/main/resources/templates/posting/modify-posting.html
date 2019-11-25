@@ -37,9 +37,12 @@
         <textarea rows="5" cols="50" th:field="*{description}" name="description"/>
         <span th:errors="*{description}" class="error"></span>
     </div>
-    <div class="amenities-form">
-        <label th:for="amenities">Amenities:</label>
-        <input type="checkbox" th:checked="${#lists.contains(amenities, amenity)}" th:field="*{amenities}" th:each="amenity : ${amenities}" th:text="${amenity.name}" th:value="${amenity}"></input>
+    <div class="form-group" id="amenities-box">
+        <h3>Amenities:</h3>
+        <span th:each="amenity : ${amenities}">
+            <label th:for="amenities" th:text="${amenity.name}"></label>
+            <input class="amenities-input" type="checkbox" th:checked="${#lists.contains(amenities, amenity)}" th:field="*{amenities}" th:value="${amenity}"/>
+        </span>
     </div>
     <input type="hidden" name="postingUserId" th:value="${activeSession.user.id}">
     <input type="hidden" name="modifiedPostingId" th:value="${modifiedPosting.id}">

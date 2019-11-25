@@ -14,7 +14,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
 
 @Controller
 @RequestMapping("posting")
@@ -335,6 +338,9 @@ public class PostingController {
                 return "redirect:/";
             }
             Posting modifiedPosting = postingDao.findById(postingId).get();
+            LocalDateTime currentDate = LocalDateTime.now();
+            currentDate.minusDays(currentDate.getDayOfMonth() - 1).getDayOfMonth();
+            model.addAttribute("date", currentDate);
             model.addAttribute("title", "Book Posting" + modifiedPosting.getId());
             model.addAttribute("activeSession", activeSession);
             model.addAttribute("modifiedPosting", modifiedPosting);

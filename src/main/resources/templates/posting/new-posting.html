@@ -36,8 +36,11 @@
         <span th:errors="*{description}" class="error"></span>
     </div>
     <div class="form-group" id="amenities-box">
-        <label th:for="amenities">Amenities:</label>
-        <input type="checkbox" th:field="*{amenities}" th:each="amenity : ${amenities}" th:text="${amenity.name}" th:value="${amenity}"></input>
+        <h3>Amenities:</h3>
+        <span th:each="amenity : ${amenities}">
+            <label th:for="amenities" th:text="${amenity.name}"></label>
+            <input class="amenities-input" type="checkbox" th:field="*{amenities}" th:value="${amenity}"/>
+        </span>
     </div>
     <div class="form-group">
         <label th:for="uploadPics">Upload Pictures:</label>

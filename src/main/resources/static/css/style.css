@@ -295,5 +295,8 @@ a {
     color: blue;
 }
 #amenities-box{
-    padding: 5em;
+    float: left;
+}
+.amenities-input{
+    display: inline-block;
 }
